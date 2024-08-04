@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #ff6b6b, #f06595, #d63c4b);
+            background-size: 600% 600%;
+            animation: gradient 15s ease infinite;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        select, button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        select {
+            background-color: #fff;
+            color: #333;
+        }
+
+        button {
+            background-color: #ff6b6b;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff3f3f;
+        }
+
+        #weather-info {
+            margin-top: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <select id="city">
+            <option value="" disabled selected>Select city</option>
+            <option value="Karachi">Karachi</option>
+            <option value="Lahore">Lahore</option>
+            <option value="Islamabad">Islamabad</option>
+            <option value="Rawalpindi">Rawalpindi</option>
+            <option value="Faisalabad">Faisalabad</option>
+            <option value="Multan">Multan</option>
+            <option value="Peshawar">Peshawar</option>
+            <option value="Quetta">Quetta</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Gujranwala">Gujranwala</option>
+        </select>
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather-info">
+            <h2 id="city-name"></h2>
+            <p id="temperature"></p>
+            <p id="description"></p>
+        </div>
+    </div>
+    <script>
+        async function getWeather() {
+            const city = document.getElementById('city').value;
+            if (!city) {
+                alert('Please select a city');
+                return;
+            }
+    
+            const apiKey = '77d2bad37d3816b1980acc451fd29d55'; // Replace with your OpenWeatherMap API key
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+            console.log("url: ",url)
+    
+            try {
+                const response = await fetch(url);
+                console.log("response weather",response)
+                if (!response.ok) {
+                    throw new Error('City not found');
+                }
+                const data = await response.json();
+                document.getElementById('city-name').innerText = data.name;
+                document.getElementById('temperature').innerText = `Temperature: ${data.main.temp}°C`;
+                document.getElementById('description').innerText = `Weather: ${data.weather[0].description}`;
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+    </script>
+    
+</body>
+</html>
+
+
